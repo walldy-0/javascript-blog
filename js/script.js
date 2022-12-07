@@ -16,13 +16,13 @@ const titleClickHandler = function(event) {
     }
 
     /* add class 'active' to the clicked link <article class="post active" */
+    
+    /* remove class 'active' from all articles */
     const activeArticles = document.querySelectorAll('.post.active');
 
     for (let activeArticle of activeArticles) {
         activeArticle.classList.remove('active');
     }
-
-    /* remove class 'active' from all articles */
 
     /* get 'href' attribute from the clicked link */
 
