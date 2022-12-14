@@ -73,9 +73,6 @@
       /* find tags wrapper */
       let tagsWrapper = article.querySelector(optArticleTagsSelector);
 
-      /* make html variable with empty string */
-      let html = '';
-
       /* get tags from data-tags attribute */
       const tagsAttribute = article.getAttribute(optArticleTagsAttribute);
 
@@ -84,17 +81,10 @@
 
       /* START LOOP: for each tag */
       for (let tag of tags) {
-
-        /* generate HTML of the link */
-        const link = '<li><a href="#tag-' + tag + '">' + tag + '</a></li>';
-
-        /* add generated code to html variable */
-        html += link;
+        /* append HTML of the link into the tags wrapper */
+        tagsWrapper.innerHTML += '<li><a href="#tag-' + tag + '">' + tag + '</a></li>';
       }
       /* END LOOP: for each tag */
-
-      /* insert HTML of all the links into the tags wrapper */
-      tagsWrapper.innerHTML = html;
     }
     /* END LOOP: for every article: */
   };
