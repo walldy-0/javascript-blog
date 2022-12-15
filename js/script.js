@@ -152,11 +152,14 @@
       /* [DONE] get author from data-author attribute */
       const authorAttribute = article.getAttribute('data-author');
 
+      /* [DONE] make author href from author attribute */
+      const authorHref = '#author-' + authorAttribute.replace(' ', '-');
+
       /* [DONE] find author wrapper */
       let authorWrapper = article.querySelector(optArticleAuthorSelector);
 
       /* [DONE] insert author into author wrapper */
-      authorWrapper.innerHTML = 'by ' + authorAttribute;
+      authorWrapper.innerHTML = '<a href="' + authorHref + '">' + 'by ' + authorAttribute + '</a>';
     }
     /* END LOOP: for every article */
   };
