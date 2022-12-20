@@ -1,5 +1,44 @@
 'use strict';
 {
+  /* [IN PROGRESS] change script options */
+  const optArticleSelector = '.post',
+    optTitleSelector = '.post-title',
+    optTitleListSelector = '.titles',
+    optArticleTagsSelector = '.post-tags .list',
+    optArticleAuthorSelector = '.post-author',
+    optTagsListSelector = '.tags.list',
+    //optCloudClassCount = 5,
+    //optCloudClassPrefix = 'tag-size-',
+    optAuthorsListSelector = '.list.authors';
+
+    const opts = {
+      tagSizes: {
+        count: 5,
+        classPrefix: 'tag-size-',
+      },
+    };
+    // [DONE...]
+
+    const select = {
+      all: {
+        articles: '.post',
+        linksTo: {
+          tags: 'a[href^="#tag-"]',
+          authors: 'a[href^="#author-"]',
+        },
+      },
+      article: {
+        tags: '.post-tags .list',
+        author: '.post-author',
+      },
+      listOf: {
+        titles: '.titles',
+        tags: '.tags.list',
+        authors: '.authors.list',
+      },
+    };
+    /* [IN PROGRESS] [END OF] change script options */
+
   const titleClickHandler = function(event) {
     event.preventDefault();
     const clickedElement = this;
@@ -28,16 +67,6 @@
     /* [DONE] add class 'active' to the correct article */
     article.classList.add('active');
   };
-
-  const optArticleSelector = '.post',
-    optTitleSelector = '.post-title',
-    optTitleListSelector = '.titles',
-    optArticleTagsSelector = '.post-tags .list',
-    optArticleAuthorSelector = '.post-author',
-    optTagsListSelector = '.tags.list',
-    optCloudClassCount = 5,
-    optCloudClassPrefix = 'tag-size-',
-    optAuthorsListSelector = '.list.authors';
 
   const generateTitleLinks = function(customSelector = '') {
     /* [DONE] remove contents of titleList */
@@ -88,7 +117,7 @@
   };
 
   const calculateTagClass = function(count, params) {
-    return optCloudClassPrefix + Math.round(((count - params.min) / (params.max - params.min)) * (optCloudClassCount - 1) + 1 );
+    return opts.tagSizes.classPrefix + Math.round(((count - params.min) / (params.max - params.min)) * (opts.tagSizes.count - 1) + 1 );
   };
 
   const generateTags = function() {
