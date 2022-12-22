@@ -1,5 +1,13 @@
 'use strict';
 {
+  const templates = {
+    articleLink: Handlebars.compile(document.querySelector('#template-article-link').innerHTML),
+    tagLink: Handlebars.compile(document.querySelector('#template-tag-link').innerHTML),
+    tagCloudLink: Handlebars.compile(document.querySelector('#template-tag-cloud-link').innerHTML),
+    articleAuthor: Handlebars.compile(document.querySelector('#template-article-author').innerHTML),
+    authorsList: Handlebars.compile(document.querySelector('#template-authors-list').innerHTML)
+  }
+
   //#region Settings
   const opts = {
     tagSizes: {
@@ -75,7 +83,8 @@
       const articleTitle = article.querySelector(select.article.title).innerHTML;
 
       /* [DONE] insert link into titleList */
-      titleList.innerHTML += '<li><a href="#' + articleId + '"><span>' + articleTitle + '</span></a></li>';
+      const linkHTMLData = { id: articleId, title: articleTitle };
+      titleList.innerHTML += templates.articleLink(linkHTMLData);
     }
 
     /* [DONE] add links handlers */
@@ -130,11 +139,9 @@
 
       /* START LOOP: for each tag */
       for (let tag of tags) {
-        /* create HTML of the link */
-        const linkHTML = '<li><a href="#tag-' + tag + '">' + tag + '</a></li>';
-
         /* [DONE] append HTML of the link into the tags wrapper */
-        tagsWrapper.innerHTML += linkHTML;
+        const linkHTMLData = { tag };
+        tagsWrapper.innerHTML += templates.tagLink(linkHTMLData);;
 
         /* [DONE] check if this link is NOT already in allTags */
         if (!allTags[tag]) {
@@ -153,18 +160,22 @@
 
     const tagsParams = calculateTagsParams(allTags);
     
-    /* [DONE] create variable for all links HTML code */
-    let allTagsHTML = '';
+    /* [DONE] create variable for all links */
+    let allTagsData = { tags: [] };
 
     /* [DONE] START LOOP: for each tag in allTags: */
     for (let tag in allTags) {
-      /* [DONE] generate code of a link and add it to allTagsHTML */
-      allTagsHTML += '<li><a href="#tag-' + tag + '" class="' + calculateTagClass(allTags[tag], tagsParams) + '">' + tag +  '</a></li>';
+      /* [DONE] create tag link parameters */
+      allTagsData.tags.push({
+        tag: tag,
+        count: allTags[tag],
+        className: calculateTagClass(allTags[tag], tagsParams)
+      });
     }
     /* [DONE] END LOOP: for each tag in allTags: */
-
-    /* [DONE] add html from allTagsHTML to tagList */
-    tagList.innerHTML = allTagsHTML;
+    
+    /* [DONE] generate HTML code of tags cloud */
+    tagList.innerHTML = templates.tagCloudLink(allTagsData);
   };
 
   generateTags();
@@ -250,7 +261,8 @@
       let authorWrapper = article.querySelector(select.article.author);
 
       /* [DONE] insert author into author wrapper */
-      authorWrapper.innerHTML = '<a href="' + authorHref + '">' + 'by ' + authorName + '</a>';
+      const linkHTMLData = { href: authorHref, name: authorName };
+      authorWrapper.innerHTML = templates.articleAuthor(linkHTMLData);
 
       /* count author's articles */
       if (!allAuthors[authorVarName]) {
@@ -265,9 +277,15 @@
     const authorsList = document.querySelector(select.listOf.authors);
 
     /* generate author's links in right column */
+    let allAuthorsData = { authors: [] };
     for (let auth in allAuthors) {
-      authorsList.innerHTML += '<li><a href="#author-' + auth + '"><span class="author-name">' + getAuthorName(auth) + ' (' + allAuthors[auth] + ')</span></a></li>';
+      allAuthorsData.authors.push({
+        name: getAuthorName(auth),
+        href: '#author-' + auth,
+        count: allAuthors[auth]
+      });
     }
+    authorsList.innerHTML = templates.authorsList(allAuthorsData);
   };
 
   generateAuthors();
